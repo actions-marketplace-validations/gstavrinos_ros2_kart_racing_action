@@ -56,9 +56,9 @@ runs:
         DESTINATION_BRANCH: leaderboards
       run: |
         cd ros2_kart_racing
-        export NOW=$( date -u '+%Y-%m-%d_%H:%M:%S' )
+        export NOW=$( date -u '+%Y-%m-%d_%H-%M-%S' )
         export MESSAGE="${{ github.triggering_actor }}: new $TRACK record at $NOW"
-        git checkout -b "${{ github.triggering_actor }}-leaderboards-$NOW"
+        git checkout -b "${{ github.triggering_actor }}-pb-$NOW"
         git add $FILE_TO_COMMIT
         git commit -m "$MESSAGE"
         gh pr create -r gstavrinos -a gstavrinos -f
