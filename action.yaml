@@ -55,7 +55,7 @@ runs:
         FILE_TO_COMMIT: ${TRACK}.md
         DESTINATION_BRANCH: leaderboards
       run: |
-        cd ros_ws/src/ros2_kart_racing
+        cd ros2_kart_racing
         export NOW=$( date -u '+%Y-%m-%d_%H:%M:%S' )
         export MESSAGE="${{ github.triggering_actor }}: new $TRACK record at $NOW"
         git checkout -b "${{ github.triggering_actor }}-leaderboards-$NOW"
