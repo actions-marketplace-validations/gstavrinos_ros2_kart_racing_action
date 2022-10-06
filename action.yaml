@@ -16,6 +16,7 @@ runs:
         fetch-depth: 0
     - name: Copying dependencies to /tmp...
         run: bash -c "cp ${{ github.workspace }}/ros_ws/src/ros2_kart_racing_competition/dependencies.repos /tmp/"
+        shell: bash
     - name: Checking out the ros2_kart_racing repository (leaderboards)
       uses: actions/checkout@v3
       with:
