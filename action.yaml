@@ -14,6 +14,8 @@ runs:
         path: ros_ws/src/ros2_kart_racing_competition
         ref: competition
         fetch-depth: 0
+    - name: Copying dependencies to /tmp...
+        run: bash -c "cp ${{ github.workspace }}/ros_ws/src/ros2_kart_racing_competition/dependencies.repos /tmp/"
     - name: Checking out the ros2_kart_racing repository (leaderboards)
       uses: actions/checkout@v3
       with:
@@ -36,7 +38,7 @@ runs:
               "symlink-install": true
             }
           }
-        vcs-repo-file-url: ${{ github.workspace }}/ros_ws/src/ros2_kart_racing_competition/dependencies.repo
+        vcs-repo-file-url: /tmp/dependencies.repos
     - name: "Running the simulation on track: kartland"
       run: bash -c "source /opt/ros/humble/setup.sh && source ros_ws/install/setup.bash && ros2 launch kart_simulation kart_kartland_simulation.launch.py competition_mode:=true gui:=false &"
       shell: bash
