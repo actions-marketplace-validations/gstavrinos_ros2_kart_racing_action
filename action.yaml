@@ -35,8 +35,8 @@ runs:
               "symlink-install": true
             }
           }
-    - name: Running the simulation on track: kartland
-      run: ros2 launch kart_simulation kart_kartland_simulation.launch.py competition_mode:=true gui:=false &
+    - name: "Running the simulation on track: kartland"
+      run: "ros2 launch kart_simulation kart_kartland_simulation.launch.py competition_mode:=true gui:=false &"
       shell: bash
     - name: Running the competition judge
       run: python3 competition_judge.py ${{ github.triggering_actor }}
