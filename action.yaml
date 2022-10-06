@@ -11,13 +11,14 @@ runs:
     - name: Checking out the repository
       uses: actions/checkout@v3
       with:
+        path: ros_ws/src/ros2_kart_racing_competition
+        ref: competition
         fetch-depth: 0
-        path: ros2_kart_racing_competition
     - name: Checking out the ros2_kart_racing repository
       uses: actions/checkout@v3
       with:
         repository: gstavrinos/ros2_kart_racing
-        path: ros2_kart_racing_master
+        path: ros_ws/src/ros2_kart_racing_master
         ref: master
         fetch-depth: 0
     - name: Checking out the ros2_kart_racing  repository (leaderboards)
