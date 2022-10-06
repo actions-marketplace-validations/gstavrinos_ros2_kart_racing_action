@@ -57,7 +57,7 @@ runs:
         export MESSAGE="${{ github.triggering_actor }}: new $TRACK record at $NOW"
         cd ros2_kart_racing
         git checkout -b "${{ github.triggering_actor }}-pb-$NOW"
-        git add ${FILE_TO_COMMIT}.md
+        git add kartland.md
         git commit -m "$MESSAGE"
         gh pr create -r gstavrinos -a gstavrinos -B $DESTINATION_BRANCH -f
       shell: bash
