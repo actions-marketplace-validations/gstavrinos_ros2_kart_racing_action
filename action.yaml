@@ -5,13 +5,8 @@ branding:
   icon: flag  
   color: black
 
-on: 
-  push:
-    branches:
-      - competition
 runs:
-  using: docker
-  docker: docker://gstavrinos:ros2ez
+  using: composite 
   steps:
     - name: Checking out the repository
       uses: actions/checkout@v3
