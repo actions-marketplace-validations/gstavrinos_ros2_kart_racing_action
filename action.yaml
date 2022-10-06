@@ -1,4 +1,6 @@
-name: ros2_kart_racing_competition
+name: ROS2 Kart Racing Competition
+author: George Stavrinos
+description: The action that is used by the ros2_kart_racing competition package to add users to the leaderboards branch.
 on: 
   push:
     branches:
