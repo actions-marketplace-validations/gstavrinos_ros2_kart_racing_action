@@ -57,13 +57,11 @@ runs:
       shell: bash
     - name: Adding record on leaderboards
       env:
-        GH_TOKEN: ${{ inputs.token }}
-        TRACK: kartland
-        DESTINATION_BRANCH: leaderboards
-        NOW: $( date -u '+%Y-%m-%d_%H-%M-%S' )
-        MESSAGE: "${{ github.triggering_actor }}: new $TRACK record!"
+        GH_TOKEN: "${{ inputs.token }}"
+        NOW: "$( date -u '+%Y-%m-%d_%H-%M-%S' )"
+        MESSAGE: "${{ github.triggering_actor }}: new kartland record!"
       run: |
-        gh repo fork gstavrinos/ros2_kart_racing --clone=false
+        gh repo fork gstavrinos/ros2_kart_racing --clone=false || true
         cd ros2_kart_racing
         git fetch upstream leaderboards
         git checkout leaderboards
@@ -72,5 +70,5 @@ runs:
         git config --replace-all user.name "${{ github.triggering_actor }}"
         git config --replace-all user.email "${{ github.triggering_actor }}@users.noreply.github.com"
         git commit -m "$MESSAGE"
-        gh pr create -r gstavrinos -a gstavrinos -B $DESTINATION_BRANCH -t "$MESSAGE" -b "At $NOW in ${{ github.repositoryUrl }}, commit: ${{ github.sha }}, triggered by ${{ github.workflow }} with a ${{ github.event_name }} event from the ${{ github.action }} action."
+        gh pr create -r gstavrinos -a gstavrinos -B leaderboards -t "$MESSAGE" -b "At $NOW in ${{ github.repositoryUrl }}, commit: ${{ github.sha }}, triggered by ${{ github.workflow }} with a ${{ github.event_name }} event from the ${{ github.action }} action."
       shell: bash
