@@ -55,7 +55,6 @@ runs:
     - name: Downloading gh
       run: sudo DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends --quiet --yes gh
       shell: bash
-    - name: Tidying up forks, branches etc
     - name: Adding record on leaderboards
       env:
         GH_TOKEN: ${{ inputs.token }}
