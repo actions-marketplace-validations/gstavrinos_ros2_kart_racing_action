@@ -57,9 +57,9 @@ runs:
     - name: Adding record on leaderboards
       env:
         GH_TOKEN: "${{ inputs.token }}"
-        NOW: "$( date -u '+%Y-%m-%d_%H-%M-%S' )"
         MESSAGE: "${{ github.triggering_actor }}: new kartland record!"
       run: |
+        export NOW="$( date -u '+%Y-%m-%d_%H-%M-%S' )"
         export DESTINATION_BRANCH=${{ github.triggering_actor }}"-pb-"${NOW}
         cd ros2_kart_racing
         git checkout -b "${DESTINATION_BRANCH}"
