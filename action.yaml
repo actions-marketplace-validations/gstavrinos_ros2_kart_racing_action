@@ -62,6 +62,7 @@ runs:
         NOW: "$( date -u '+%Y-%m-%d_%H-%M-%S' )"
         MESSAGE: "${{ github.triggering_actor }}: new kartland record!"
       run: |
+        cd ros2_kart_racing
         git add kartland.md
         git config --replace-all user.name "${{ github.triggering_actor }}"
         git config --replace-all user.email "${{ github.triggering_actor }}@users.noreply.github.com"
