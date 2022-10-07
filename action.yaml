@@ -20,13 +20,6 @@ runs:
     - name: Copying dependencies to /tmp...
       run: bash -c "cp ros_ws/src/ros2_kart_racing_competition/dependencies.repos /tmp/"
       shell: bash
-    - name: Checking out the ros2_kart_racing repository (leaderboards)
-      uses: actions/checkout@v3
-      with:
-        repository: gstavrinos/ros2_kart_racing
-        path: ros2_kart_racing
-        ref: leaderboards
-        fetch-depth: 0
     - name: Setting up ROS
       uses: ros-tooling/setup-ros@v0.4
       with:
@@ -43,6 +36,17 @@ runs:
             }
           }
         vcs-repo-file-url: /tmp/dependencies.repos
+    - name: Downloading gh
+      run: sudo DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends --quiet --yes gh
+      shell: bash
+    - name: Forking the ros2_kart_racing repository (for leaderboards)
+      env:
+        GH_TOKEN: "${{ inputs.token }}"
+      run: |
+        gh repo fork gstavrinos/ros2_kart_racing --clone=true -- --branch leaderboards
+        cd ros2_kart_racing
+        git checkout -b "${{ github.triggering_actor }}-pb-$NOW"
+      shell: bash
     - name: "Running the simulation on track: kartland"
       run: bash -c "source /opt/ros/humble/setup.sh && source ros_ws/install/setup.bash && ros2 launch kart_simulation kart_kartland_simulation.launch.py competition_mode:=true gui:=false &"
       shell: bash
@@ -52,20 +56,12 @@ runs:
     - name: Dummy leaderboards file for testing
       run: bash -c "echo $(date) >> ros2_kart_racing/kartland.md"
       shell: bash
-    - name: Downloading gh
-      run: sudo DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends --quiet --yes gh
-      shell: bash
     - name: Adding record on leaderboards
       env:
         GH_TOKEN: "${{ inputs.token }}"
         NOW: "$( date -u '+%Y-%m-%d_%H-%M-%S' )"
         MESSAGE: "${{ github.triggering_actor }}: new kartland record!"
       run: |
-        gh repo fork gstavrinos/ros2_kart_racing --clone=false || true
-        cd ros2_kart_racing
-        git fetch upstream leaderboards
-        git checkout leaderboards
-        git checkout -b "${{ github.triggering_actor }}-pb-$NOW"
         git add kartland.md
         git config --replace-all user.name "${{ github.triggering_actor }}"
         git config --replace-all user.email "${{ github.triggering_actor }}@users.noreply.github.com"
