@@ -4,7 +4,10 @@ description: The action that is used by the ros2_kart_racing competition package
 branding:
   icon: flag  
   color: black
-
+inputs:
+  token:
+    description: Github token to open a PR
+    required: true
 runs:
   using: composite 
   steps:
@@ -56,6 +59,7 @@ runs:
         export DESTINATION_BRANCH=leaderboards
         export NOW=$( date -u '+%Y-%m-%d_%H-%M-%S' )
         export MESSAGE="${{ github.triggering_actor }}: new $TRACK record!"
+        export GH_TOKEN="${{ inputs.token }}"
         cd ros2_kart_racing
         git checkout -b "${{ github.triggering_actor }}-pb-$NOW"
         git add kartland.md
