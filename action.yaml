@@ -51,6 +51,7 @@ runs:
       shell: bash
     - name: Adding record on leaderboards
       run: |
+        sudo DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends --quiet --yes gh
         export TRACK=kartland
         export DESTINATION_BRANCH=leaderboards
         export NOW=$( date -u '+%Y-%m-%d_%H-%M-%S' )
