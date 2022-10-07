@@ -61,5 +61,5 @@ runs:
         git config --replace--all user.name "${{ github.triggering_actor }}"
         git config --global --replace--all user.email "${{ github.triggering_actor }}@users.noreply.github.com"
         git commit -m "$MESSAGE"
-      gh pr create -r gstavrinos -a gstavrinos -B $DESTINATION_BRANCH -t "$MESSAGE" -b "At $NOW in ${{ github.repositoryUrl }}, commit: ${{ github.sha }}, triggered by ${{ github.workflow }} with a ${{ github.event_name }} event from the ${{ github.action }} action."
+        gh pr create -r gstavrinos -a gstavrinos -B $DESTINATION_BRANCH -t "$MESSAGE" -b "At $NOW in ${{ github.repositoryUrl }}, commit: ${{ github.sha }}, triggered by ${{ github.workflow }} with a ${{ github.event_name }} event from the ${{ github.action }} action."
       shell: bash
