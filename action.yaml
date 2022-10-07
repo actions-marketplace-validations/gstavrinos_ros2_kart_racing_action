@@ -67,6 +67,8 @@ runs:
         git config --replace-all user.name "${{ github.triggering_actor }}"
         git config --replace-all user.email "${{ github.triggering_actor }}@users.noreply.github.com"
         git commit -m "$MESSAGE"
-        git push origin ${DESTINATION_BRANCH}
+        export FORK_REPO=$(git remote get-url origin | sed -e "s|https://|https://${{ github.triggering_actor }}:$GH_TOKEN|g")
+        git remote add tokenized_origin "$FORK_REPO"
+        git push tokenized_origin ${DESTINATION_BRANCH}
         gh pr create -r gstavrinos -a gstavrinos -B leaderboards -t "$MESSAGE" -b "At $NOW in ${{ github.repositoryUrl }}, commit: ${{ github.sha }}, triggered by ${{ github.workflow }} with a ${{ github.event_name }} event from the ${{ github.action }} action."
       shell: bash
