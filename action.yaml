@@ -44,8 +44,6 @@ runs:
         GH_TOKEN: "${{ inputs.token }}"
       run: |
         gh repo fork gstavrinos/ros2_kart_racing --clone=true -- --branch leaderboards
-        cd ros2_kart_racing
-        git checkout -b "${{ github.triggering_actor }}-pb-$NOW"
       shell: bash
     - name: "Running the simulation on track: kartland"
       run: bash -c "source /opt/ros/humble/setup.sh && source ros_ws/install/setup.bash && ros2 launch kart_simulation kart_kartland_simulation.launch.py competition_mode:=true gui:=false &"
@@ -62,10 +60,13 @@ runs:
         NOW: "$( date -u '+%Y-%m-%d_%H-%M-%S' )"
         MESSAGE: "${{ github.triggering_actor }}: new kartland record!"
       run: |
+        export DESTINATION_BRANCH="${{ github.triggering_actor }}-pb-${NOW}"
         cd ros2_kart_racing
+        git checkout -b "${DESTINATION_BRANCH}"
         git add kartland.md
         git config --replace-all user.name "${{ github.triggering_actor }}"
         git config --replace-all user.email "${{ github.triggering_actor }}@users.noreply.github.com"
         git commit -m "$MESSAGE"
+        git push origin ${DESTINATION_BRANCH}
         gh pr create -r gstavrinos -a gstavrinos -B leaderboards -t "$MESSAGE" -b "At $NOW in ${{ github.repositoryUrl }}, commit: ${{ github.sha }}, triggered by ${{ github.workflow }} with a ${{ github.event_name }} event from the ${{ github.action }} action."
       shell: bash
