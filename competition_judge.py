@@ -27,7 +27,7 @@ class CompetitionJudge(Node):
     def dont_you_dare(self):
         p = self.get_publishers_info_by_topic(topic_name="/race_steward/live_info")
         if len(p) != 1 or (len(p) > 0 and p[0].node_name != "race_steward"):
-            self.get_logger().error("I DETECTED A CHEATER! \n---\n%s\n---\n", str(p))
+            self.get_logger().error("I DETECTED A CHEATER! \n---\n%s\n---\n" % str(p))
             self.fail()
 
     def info_callback(self, msg):
