@@ -11,31 +11,31 @@ inputs:
 runs:
   using: composite 
   steps:
-    - name: Checking out the repository
-      uses: actions/checkout@v3
-      with:
-        path: ros_ws/src/ros2_kart_racing_competition
-        ref: competition
-        fetch-depth: 0
-    - name: Copying dependencies to /tmp...
-      run: bash -c "cp ros_ws/src/ros2_kart_racing_competition/dependencies.repos /tmp/"
-      shell: bash
-    - name: Setting up ROS
-      uses: ros-tooling/setup-ros@v0.4
-      with:
-        required-ros-distributions: humble
-    - name: Making sure the package builds (colcon build)
-      uses: ros-tooling/action-ros-ci@v0.2
-      with:
-        target-ros2-distro: humble
-        skip-tests: true
-        colcon-defaults: |
-          {
-            "build": {
-              "symlink-install": true
-            }
-          }
-        vcs-repo-file-url: /tmp/dependencies.repos
+    # - name: Checking out the repository
+      # uses: actions/checkout@v3
+      # with:
+        # path: ros_ws/src/ros2_kart_racing_competition
+        # ref: competition
+        # fetch-depth: 0
+    # - name: Copying dependencies to /tmp...
+      # run: bash -c "cp ros_ws/src/ros2_kart_racing_competition/dependencies.repos /tmp/"
+      # shell: bash
+    # - name: Setting up ROS
+      # uses: ros-tooling/setup-ros@v0.4
+      # with:
+        # required-ros-distributions: humble
+    # - name: Making sure the package builds (colcon build)
+      # uses: ros-tooling/action-ros-ci@v0.2
+      # with:
+        # target-ros2-distro: humble
+        # skip-tests: true
+        # colcon-defaults: |
+          # {
+            # "build": {
+              # "symlink-install": true
+            # }
+          # }
+        # vcs-repo-file-url: /tmp/dependencies.repos
     - name: Downloading gh
       run: sudo DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends --quiet --yes gh
       shell: bash
@@ -70,6 +70,7 @@ runs:
         # export FORK_REPO=$(git remote get-url origin | sed -e "s|https://|https://${{ github.triggering_actor }}:$GH_TOKEN@|g")
         # git remote add tokenized_origin "$FORK_REPO"
         git remote add tokenized_origin "https://${{ github.triggering_actor }}:$GH_TOKEN@github.com/${{ github.triggering_actor }}/ros2_kart_racing"
+        git remote get-url tokenized_origin
         git push -u tokenized_origin ${DESTINATION_BRANCH}
         gh pr create -r gstavrinos -a gstavrinos -B leaderboards -t "$MESSAGE" -b "At $NOW in ${{ github.repositoryUrl }}, commit: ${{ github.sha }}, triggered by ${{ github.workflow }} with a ${{ github.event_name }} event from the ${{ github.action }} action."
       shell: bash
