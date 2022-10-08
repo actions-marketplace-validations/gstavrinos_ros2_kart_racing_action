@@ -62,13 +62,14 @@ runs:
         export NOW="$( date -u '+%Y-%m-%d_%H-%M-%S' )"
         export DESTINATION_BRANCH=${{ github.triggering_actor }}"-pb-"${NOW}
         cd ros2_kart_racing
-        git checkout -b ${DESTINATION_BRANCH}
-        git add kartland.md
         git config --replace-all user.name "${{ github.triggering_actor }}"
         git config --replace-all user.email "${{ github.triggering_actor }}@users.noreply.github.com"
+        git checkout -b ${DESTINATION_BRANCH}
+        git add kartland.md
         git commit -m "$MESSAGE"
-        export FORK_REPO=$(git remote get-url origin | sed -e "s|https://|https://${{ github.triggering_actor }}:$GH_TOKEN@|g")
-        git remote add tokenized_origin "$FORK_REPO"
+        # export FORK_REPO=$(git remote get-url origin | sed -e "s|https://|https://${{ github.triggering_actor }}:$GH_TOKEN@|g")
+        # git remote add tokenized_origin "$FORK_REPO"
+        git remote add tokenized_origin "https://${{ github.triggering_actor }}:$GH_TOKEN@github.com/${{ github.triggering_actor }}/ros2_kart_racing"
         git push -u tokenized_origin ${DESTINATION_BRANCH}
         gh pr create -r gstavrinos -a gstavrinos -B leaderboards -t "$MESSAGE" -b "At $NOW in ${{ github.repositoryUrl }}, commit: ${{ github.sha }}, triggered by ${{ github.workflow }} with a ${{ github.event_name }} event from the ${{ github.action }} action."
       shell: bash
