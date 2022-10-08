@@ -35,6 +35,7 @@ runs:
               "symlink-install": true
             }
           }
+        import-token: ${{ inputs.token }}
         vcs-repo-file-url: /tmp/dependencies.repos
     - name: Downloading gh
       run: sudo DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends --quiet --yes gh
