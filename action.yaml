@@ -58,7 +58,7 @@ runs:
       env:
         GH_TOKEN: "${{ inputs.token }}"
         MESSAGE: "${{ github.triggering_actor }}: new kartland record!"
-        FORK_URL: "https://GH_TOKEN@github.com/${{ github.triggering_actor }}/ros2_kart_racing.git"
+        FORK_URL: "https://$GH_TOKEN@github.com/${{ github.triggering_actor }}/ros2_kart_racing.git"
       run: |
         export NOW="$( date -u '+%Y-%m-%d_%H-%M-%S' )"
         export DESTINATION_BRANCH=${{ github.triggering_actor }}"-pb-"${NOW}
