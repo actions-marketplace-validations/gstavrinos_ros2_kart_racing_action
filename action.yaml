@@ -58,7 +58,7 @@ runs:
       env:
         GH_TOKEN: "${{ inputs.token }}"
         MESSAGE: "${{ github.triggering_actor }}: new kartland record!"
-        FORK_URL: "https://${{ inputs.token }}@github.com/${{ github.triggering_actor }}/ros2_kart_racing.git"
+        # FORK_URL: "https://${{ inputs.token }}@github.com/${{ github.triggering_actor }}/ros2_kart_racing.git"
       run: |
         export NOW="$( date -u '+%Y-%m-%d_%H-%M-%S' )"
         export DESTINATION_BRANCH=${{ github.triggering_actor }}"-pb-"${NOW}
@@ -68,10 +68,9 @@ runs:
         git checkout -b ${DESTINATION_BRANCH}
         git add kartland.md
         git commit -m "$MESSAGE"
-        # export FORK_REPO=$(git remote get-url origin | sed -e "s|https://|https://${{ github.triggering_actor }}:$GH_TOKEN@|g")
-        # git remote add tokenized_origin "$FORK_REPO"
-        git remote add tokenized_origin "$FORK_URL"
-        git remote get-url tokenized_origin
+        export FORK_REPO=$(git remote get-url origin | sed -e "s|https://|https://${{ github.triggering_actor }}:$GH_TOKEN@|g")
+        git remote add tokenized_origin "$FORK_REPO"
+        # git remote add tokenized_origin "$FORK_URL"
         git push -u tokenized_origin ${DESTINATION_BRANCH}
         gh pr create -r gstavrinos -a gstavrinos -B leaderboards -t "$MESSAGE" -b "At $NOW in ${{ github.repositoryUrl }}, commit: ${{ github.sha }}, triggered by ${{ github.workflow }} with a ${{ github.event_name }} event from the ${{ github.action }} action."
       shell: bash
