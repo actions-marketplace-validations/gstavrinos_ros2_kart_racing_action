@@ -75,7 +75,7 @@ class CompetitionJudge(Node):
                     f.write("| " + t[0] + " | " + str(t[1]) + " | " + t[2] + " |\n")
             exit(0)
         else:
-            self.get_logger().warn("%s: No personal best!")
+            self.get_logger().warn("%s: No personal best!" % self.driver)
             exit(1)
 
     def fail(self):
