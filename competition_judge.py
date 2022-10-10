@@ -67,7 +67,7 @@ class CompetitionJudge(Node):
         if need_to_write_file:
             leaderboards_data = sorted(leaderboards_data, key=lambda t: t[1])
 
-            with open(leaderboards_f, "w") as f:
+            with open(leaderboards_f, "w+") as f:
                 f.write("| user | raw time | readable time |\n")
                 f.write("| - | - | - |\n")
                 for t in leaderboards_data:
