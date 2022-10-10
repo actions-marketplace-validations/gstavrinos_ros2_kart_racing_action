@@ -49,7 +49,7 @@ class CompetitionJudge(Node):
         minutes, seconds = divmod(self.laptime, 60)
         human_readable_time = "{:02d}:{:07.4f}".format(int(minutes), seconds)
         leaderboards_f = self.leaderboards_path+os.sep+self.track+".md"
-        leaderboards_data = [(self.driver,raw_time,human_readable_time)]
+        leaderboards_data = [(self.driver,float(raw_time),human_readable_time)]
         need_to_write_file = True
         if os.path.exists(leaderboards_f):
             with open(leaderboards_f, "r") as f:
