@@ -45,6 +45,10 @@ runs:
         GH_TOKEN: "${{ inputs.token }}"
       run: |
         gh repo fork gstavrinos/ros2_kart_racing --clone=true -- --branch leaderboards
+        cd ros2_kart_racing
+        git config --replace-all user.name "${{ github.triggering_actor }}"
+        git config --replace-all user.email "${{ github.triggering_actor }}@users.noreply.github.com"
+        git merge upstream/leaderboards
       shell: bash
     - name: "Running the simulation on track: kartland"
       env:
@@ -53,9 +57,6 @@ runs:
         bash -c "source /opt/ros/humble/setup.sh && source ros_ws/install/setup.bash && ros2 launch kart_simulation kart_kartland_simulation.launch.py competition_mode:=true gui:=false &"
         bash -c "source /opt/ros/humble/setup.sh && source ros_ws/install/setup.bash && python3 ${GITHUB_ACTION_PATH}/competition_judge.py ${{ github.triggering_actor }} $GITHUB_WORKSPACE/ros2_kart_racing"
       shell: bash
-    # - name: Running the competition judge
-      # run: bash -c "source /opt/ros/humble/setup.sh && source ros_ws/install/setup.bash && python3 ${GITHUB_ACTION_PATH}/competition_judge.py ${{ github.triggering_actor }}"
-      # shell: bash
     - name: Adding record on leaderboards
       env:
         GH_TOKEN: "${{ inputs.token }}"
