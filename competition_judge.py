@@ -7,7 +7,7 @@ from race_steward_msgs.msg import RaceStewardLiveInfo
 
 class CompetitionJudge(Node):
 
-    def __init__(self,driver):
+    def __init__(self, driver, leaderboards_path):
         super().__init__("competition_judge")
         self.go_sub = self.create_subscription(
             Empty,
@@ -20,6 +20,7 @@ class CompetitionJudge(Node):
             self.info_callback,
             10)
         self.driver = driver
+        self.leaderboards_path = leaderboards_path
         self.track = "test"
         self.laptime = 0.0
         self.get_logger().info("Ready to test %s\'s performance..." % self.driver)
@@ -47,7 +48,7 @@ class CompetitionJudge(Node):
         raw_time = str(self.laptime)
         minutes, seconds = divmod(self.laptime, 60)
         human_readable_time = "{:02d}:{:07.4f}".format(int(minutes), seconds)
-        leaderboards_f = "src/ros2_kart_racing"+os.sep+self.track+".md"
+        leaderboards_f = self.leaderboards_path+os.sep+self.track+".md"
         leaderboards_data = [(self.driver,raw_time,human_readable_time)]
         need_to_write_file = True
         if os.path.exists(leaderboards_f):
@@ -85,7 +86,8 @@ class CompetitionJudge(Node):
 def main():
     rclpy.init(args=None)
     driver = sys.argv[1]
-    competition_judge = CompetitionJudge(driver)
+    leaderboards_path = sys.argv[2]
+    competition_judge = CompetitionJudge(driver, leaderboards_path)
     rclpy.spin(competition_judge)
     exit(3)
 
