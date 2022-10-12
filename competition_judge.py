@@ -41,7 +41,7 @@ class CompetitionJudge(Node):
     def go_callback(self, _msg):
         self.get_logger().warn("LIGHTS OUT AND AWAY WE GO!")
         self.cheat_checker = self.create_timer(0.5, self.dont_you_dare)
-        self.timeout = self.create_timer(20*60.0, self.fail)
+        self.timeout = self.create_timer(30*60.0, self.fail)
 
     def save_laptime(self):
         self.timeout.cancel()
