@@ -8,6 +8,10 @@ inputs:
   token:
     description: Github token to open a PR
     required: true
+  track:
+    description: The track the repo is going to be tested on
+    required: true
+    default: "kartland"
 runs:
   using: composite 
   steps:
@@ -50,17 +54,17 @@ runs:
         git config --replace-all user.email "${{ github.triggering_actor }}@users.noreply.github.com"
         git merge upstream/leaderboards
       shell: bash
-    - name: "Running the simulation on track: kartland"
+    - name: "Running the simulation on track: ${{ inputs.track }}"
       env:
         RMW_IMPLEMENTATION: rmw_cyclonedds_cpp
       run: |
-        bash -c "source /opt/ros/humble/setup.sh && source ros_ws/install/setup.bash && ros2 launch kart_simulation kart_kartland_simulation.launch.py competition_mode:=true gui:=false &"
+        bash -c "source /opt/ros/humble/setup.sh && source ros_ws/install/setup.bash && ros2 launch kart_simulation kart_${{ inputs.track }}_simulation.launch.py competition_mode:=true gui:=false &"
         bash -c "source /opt/ros/humble/setup.sh && source ros_ws/install/setup.bash && python3 ${GITHUB_ACTION_PATH}/competition_judge.py ${{ github.triggering_actor }} $GITHUB_WORKSPACE/ros2_kart_racing"
       shell: bash
     - name: Adding record on leaderboards
       env:
         GH_TOKEN: "${{ inputs.token }}"
-        MESSAGE: "${{ github.triggering_actor }}: new kartland record!"
+        MESSAGE: "${{ github.triggering_actor }}: new ${{ inputs.track }} record!"
       run: |
         export NOW="$( date -u '+%Y-%m-%d_%H-%M-%S' )"
         export DESTINATION_BRANCH=${{ github.triggering_actor }}"-pb-"${NOW}
@@ -68,7 +72,7 @@ runs:
         git config --replace-all user.name "${{ github.triggering_actor }}"
         git config --replace-all user.email "${{ github.triggering_actor }}@users.noreply.github.com"
         git checkout -b ${DESTINATION_BRANCH}
-        git add kartland.md
+        git add "${{ inputs.track }}".md
         git commit -m "$MESSAGE"
         export FORK_REPO=$(git remote get-url origin | sed -e "s|https://|https://${{ github.triggering_actor }}:$GH_TOKEN@|g")
         git remote add tokenized_origin "$FORK_REPO"
