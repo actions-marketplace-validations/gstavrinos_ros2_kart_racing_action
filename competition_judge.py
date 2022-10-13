@@ -25,6 +25,7 @@ class CompetitionJudge(Node):
         self.laptime = 0.0
         self.get_logger().info("Ready to test %s\'s performance..." % self.driver)
         self.timeout = self.create_timer(30*60.0, self.fail)
+        self.system_timeout = self.create_timer(60*60.0, self.fail, clock=rclpy.clock.Clock(clock_type=rclpy.clock.ClockType.SYSTEM_TIME))
 
     def dont_you_dare(self):
         p = self.get_publishers_info_by_topic(topic_name="/race_steward/live_info")
