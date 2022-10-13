@@ -24,6 +24,7 @@ class CompetitionJudge(Node):
         self.track = "test"
         self.laptime = 0.0
         self.get_logger().info("Ready to test %s\'s performance..." % self.driver)
+        self.timeout = self.create_timer(30*60.0, self.fail)
 
     def dont_you_dare(self):
         p = self.get_publishers_info_by_topic(topic_name="/race_steward/live_info")
@@ -41,7 +42,6 @@ class CompetitionJudge(Node):
     def go_callback(self, _msg):
         self.get_logger().warn("LIGHTS OUT AND AWAY WE GO!")
         self.cheat_checker = self.create_timer(0.5, self.dont_you_dare)
-        self.timeout = self.create_timer(30*60.0, self.fail)
 
     def save_laptime(self):
         self.timeout.cancel()
